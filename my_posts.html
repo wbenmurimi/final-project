@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My posts</title>
+
+	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+	<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link rel="stylesheet" href="font/css/font-awesome.min.css">
+	<!-- <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+	
+</head>
+<body>
+	<div class="navbar-fixed ">
+		
+		<nav class="white">
+			<ul class="myNav right hide-on-med-and-down">
+				<a href="#" class="brand-logo center light-blue-text">Mushene</a>
+				<a href="#logout" onclick="logout()" class=" blue-text modal-trigger"><h5>LOGOUT
+    </h5></a>
+			</ul>
+			<ul id="slide-out" class="side-nav white">
+				<div class= "myIcon center">
+					<img onclick ="home.html" class="circle responsive-img" src="image/logo.jpg">
+					
+				</div>
+			<li><a href="home.html">All Events</a></li>
+				<li><a href="#!">Upcoming Events</a></li>
+				<li><a href="my_groups.html">My Groups</a></li>
+				<li><a href="add_post.html">Add Post</a></li>
+				<li class="active"><a href="my_posts.html">My Posts</a></li>
+				<li><a href="invite.html">Invite</a></li>
+			</ul>
+			<a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu blue-text"></i></a>
+		</nav>
+	</div>
+
+	<!--end of navbar-->
+	<!--estart of post area-->
+	<div class="container">
+		<div class="row">
+			<div class="card">
+				<div class="col s12 m12 post_area">
+					<div class="card-panel grey lighten-5 z-depth-1">
+						<div class="row valign-wrapper">
+							<div class="col s2">
+								<img src="image/4.jpg" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+							</div>
+							<div class="col s10">
+								<span class="black-text">
+									Friendly match Volleyball game with University of Ghana -legon at 5pm on the basketball court.
+								</span>
+								<div class="col s12 edit_delete_post_area ">
+									<button onclick="addEquipment()" type="submit" class="btn waves-effect wave-dark add_post_btn green "><i class="fa fa-edit"></i> EDIT</button>
+									<button onclick="addEquipment()" type="submit" class="btn waves-effect wave-dark add_post_btn red right"><i class="fa fa-remove"></i> DELETE</button>
+								</div>							</div>
+							</div>
+						</div>
+					</div>
+					<div class="col s12 m12 post_area" >
+						<div class="card-panel grey lighten-5 z-depth-1">
+							<div class="row valign-wrapper">
+								<div class="col s2">
+									<img src="image/4.jpg" alt="" class="circle responsive-img"> <!-- notice the "circle" class -->
+								</div>
+								<div class="col s10">
+									<span class="black-text">
+										Photography club maiden meeting at LH 217.
+									</span>
+
+									<div class="col s12 edit_delete_post_area ">
+										<button onclick="edit_my_post()" type="submit" class="btn waves-effect wave-dark add_post_btn green "><i class="fa fa-edit"></i> EDIT</button>
+										<button onclick="delete_my_post()" type="submit" class="btn waves-effect wave-dark add_post_btn red right"><i class="fa fa-remove"></i> DELETE</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+
+		<!--  Scripts-->
+		<script src="js/jquery.js"></script>
+		<script src="js/materialize.min.js"></script>
+		<script src="js/script.js"></script> 
+		<script>
+
+			$(document).ready(function(){
+				$(".contentArea").hide();
+				$(".button-collapse").sideNav();
+				$('.modal-trigger').leanModal();
+				$('.slider').slider({full_width: true});
+				$('.datepicker').pickadate({
+		    selectMonths: true, // Creates a dropdown to control month
+		    selectYears: 15 // Creates a dropdown of 15 years to control year
+		});
+			});
+
+			
+		</script>
+	</body>
+	</html>

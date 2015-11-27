@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add Post</title>
+
+	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+	<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="css/signupstyle.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link rel="stylesheet" href="font/css/font-awesome.min.css">
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+</head>
+<body>
+	<div class="navbar-fixed ">
+		
+		<nav class="blue ">
+  <div class="nav-wrapper">
+    <a href="#" class="brand-logo center">Mushene</a>  
+    <!-- These navigation links disappear if the screen gets too small. -->
+    <ul class="left left hide-on-med-and-down">
+      <li class="active"><a class="center" href="index.html">BACK</a></li>
+      
+    </ul>
+    <!-- Put up a "hamburger" menu when the web page gets too narrow -->
+    <a href="#" data-activates="side-menu" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+    <!-- These navigation links appear when the web page gets narrow. -->
+    <!-- They appear when the user clicks the hamburger menu. -->
+    <ul class="side-nav blue" id="side-menu">
+     <li class="active"><a href="index.html">BACK</a></li>
+      
+    </ul>
+  </div>
+</nav>
+	</div>
+
+	<!--end of navbar-->
+	<!--estart of post area-->
+	<div class="container">
+	<div class="row">
+		<div class="card">
+			<h4 class="center">User Sign Up</h4>
+			<div id="error_area" class="center"> </div>
+		</div>
+	</div>
+		<div class="row">
+			<div class="card">
+			<div id="addLab">
+				<div class="input-field col s12 m6">
+					<i class="fa fa-user prefix"></i>
+					<input id="user_name" type="text" class="validate" autocomplete="off">
+					<label for="user_name">User Name</label>
+				</div>
+				<div class="input-field col s12 m6">
+					<i class="fa fa-key prefix"></i>
+					<input id="user_pass" type="password" class="validate" autocomplete="off">
+					<label for="user-pass">Password</label>
+				</div>
+				<div class="input-field col s12 m6">
+					<i class="fa fa-phone prefix"></i>
+					<input id="user_phone" type="text" class="validate" autocomplete="off">
+					<label for="user_phone">Phone Number</label>
+				</div>
+					<div class="input-field col s12 m6">
+					<i class="fa fa-calendar prefix"></i>
+					<input id="year_group" type="text" class="validate" autocomplete="off">
+					<label for="year_group">Year Group</label>
+				</div>
+				<div class="col s12 user_signup_area ">
+						<button onclick="addUser()" type="submit" class="btn waves-effect wave-dark add_post_btn blue right"><i class="fa fa-save"></i> ADD</button>
+					</div>
+			</div>
+			</div>
+
+		</div>
+	</div>
+
+	<!--footer-->
+
+	<footer class="page-footer blue">
+				<div class="container white-text">
+				© 2015 ben
+				<a class="white-text text-lighten-4 right" href="#!">Ashesi updates</a>
+			</div>
+			
+		</footer>
+		<!--  Scripts-->
+		<script src="js/jquery.js"></script>
+		<script src="js/materialize.min.js"></script>
+		<script src="js/script.js"></script> 
+		<script>
+
+			$(document).ready(function(){
+				$(".contentArea").hide();
+				$(".button-collapse").sideNav();
+				$('.modal-trigger').leanModal();
+				$('.slider').slider({full_width: true});
+				$('.datepicker').pickadate({
+		    selectMonths: true, // Creates a dropdown to control month
+		    selectYears: 15 // Creates a dropdown of 15 years to control year
+		});
+			});
+
+			
+		</script>
+	</body>
+	</html>

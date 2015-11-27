@@ -1,0 +1,61 @@
+.side-nav li:hover{
+  width: 100%;
+  background-color: #0066ff;
+  font-weight: bold;
+  text-align: center;
+}
+.side-nav li >a:hover{
+  font-size: 18px;
+  color: white;
+}
+.side-nav li{
+  text-align: center;
+  color: black;
+}
+.myIcon{
+  height: 120px;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  background-color: #0066ff;
+}
+.post_area p{
+  font-weight: bold;
+  color:#0066ff;
+  /*#b30000*/
+}
+.post_likes{
+  margin-top: -30px;
+  margin-right: 40px;
+  font-weight: bold;
+}
+
+.save_post_area{
+  margin-right: 70px;
+  margin-bottom: 30px;
+  margin-top: 30px;
+
+}
+.edit_delete_post_area{
+  margin-top: 30px;
+}
+.loginfooter{
+  margin-bottom: 30px;
+  margin-top: 30px;
+  margin-right: 30px;
+}
+#post_area_li{
+  list-style-type: none;
+  width: 100%;
+}
+.hide{
+    display: none;
+  }
+.save_post_area{
+  margin-bottom: -20px;
+  margin-top: -50px;
+
+  }
+.styleComments p{
+  cursor: pointer; 
+  cursor: hand;
+}
