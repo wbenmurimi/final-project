@@ -39,15 +39,7 @@ function sendRequest(u) {
 
 
     }
-    function hide(input){
-    // for (var i = 0; i < arguments.length; i++) {
-
-    //     var input = arguments[i];
-        $('#'+input).addClass('hide'); //jquery way
-    // }
-
-  }
-  function showDiv(input){
+    function showDiv(input){
     // alert("clicked")
     $('#'+input).removeClass('hide');
         $('#'+input).show(); //jquery way
@@ -208,7 +200,7 @@ function addPost(){
 */
 
 function getPosts(){
-  var strUrl = myurl+"cmd=5";
+  var strUrl = myurl+"cmd=12";
    // prompt("url", strUrl);
    var objResult = sendRequest(strUrl);
 
@@ -248,121 +240,8 @@ function getPosts(){
   }
 }
 
-function getMyPosts(){
-  var strUrl = myurl+"cmd=8";
-   // prompt("url", strUrl);
-   var objResult = sendRequest(strUrl);
-
-   if(objResult.result == 0){
-    document.getElementById("my_view_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-
-    return;
-  }
-  if(objResult.result == 1){  
-    for(i=1;i<objResult.post.length;i++){
-
-
-      var li = $('<li></li>');
-      li.html('<div class="col s12 m12 post_area "><div class=" grey lighten-5 z-depth-1"><div class="row valign-wrapper"><div class="col s2"><img src="image/4.jpg" alt="" class="circle responsive-img"></div><div class="col s10"><span class="black-text">'+objResult.post[i].event_name +' '+ objResult.post[i].event_time+' '+ objResult.post[i].description+'<div class=""> Posted on: '+ objResult.post[i].post_time+' </br> By: '+ objResult.post[i].posted_by+' .</div> </span><div class="col s12 edit_delete_post_area "><button id="editPost'+objResult.post[i].post_id+'" onclick="editMyPost(this)" type="submit" class="btn waves-effect wave-dark add_post_btn green "><i class="fa fa-edit"></i> EDIT</button><button id="deletePost'+objResult.post[i].post_id+'" onclick="deleteMyPost(this)" type="submit" class="btn waves-effect wave-dark add_post_btn red right"><i class="fa fa-remove"></i> DELETE</button></div>');
-      $("#my_post_area_li").append(li);
-
-      var newId=objResult.post[i].post_id;
-
-      if(document.getElementById('editPost'+newId)){
-        var getClicked=document.getElementById('editPost'+newId);
-
-        getClicked.setAttribute('id',newId);
-      }
-      if(document.getElementById('deletePost'+newId)){
-        var getClicked=document.getElementById('deletePost'+newId);
-
-        getClicked.setAttribute('id',newId);
-      }
-      if(document.getElementById('editPostbtn')){
-        var getClicked=document.getElementById('editPostbtn');
-
-        getClicked.setAttribute('id',newId);
-      }
-    }
-  }
-}
-function deleteMyPost(newid){
- var id= newid.getAttribute('id');
- var strUrl = myurl+"cmd=7&id="+id;
-  // prompt("url",strUrl);
-  var objResult = sendRequest(strUrl);
-  if(objResult.result == 0) {
-    document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-    return;
-  }
-
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-  location.reload();
-}
-function editMyPost(newid){
- var id= newid.getAttribute('id');
- var strUrl = myurl+"cmd=13&id="+id;
-  // prompt("url",strUrl);
-  var objResult = sendRequest(strUrl);
-  if(objResult.result == 0) {
-    document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-    return;
-  } 
-  hide("addPostDiv");
-  showDiv("editPost");
-  $("#event_name").val(objResult.post[1].event_name);
-  $("#event_date").val(objResult.post[1].event_time);
-  $("#event_description").val(objResult.post[1].description);
-  $("#event_poster").val(objResult.post[1].poster); 
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-
-}
-
-function addEditedPost(newid){
- var id= newid.getAttribute('id');
- var name = $("#event_name").val();
- var description = $("#event_description").val();
- var e_date = $("#event_date").val();
- var e_poster = $("#event_poster").val();
- alert("new id is "+id);
-
- if(name.length == 0){
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
-
-  return;
-}
-if(description.length == 0){
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">Empty Event Description<i class="material-icons">close</i></div>';
-  return;
-}
-if(e_date.length == 0){
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">Empty Event Date<i class="material-icons">close</i></div>';
-  return;
-}
-if(e_poster.length == 0){
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">Empty Event Poster<i class="material-icons">close</i></div>';
-  return
-}
-
-var strUrl = myurl+"cmd=6&name="+name+"&description="+description+"&date="+e_date+"&poster="+e_poster+"&id="+id;
-prompt("url",strUrl);
-var objResult = sendRequest(strUrl);
-document.getElementById("my_view_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
-if(objResult.result == 0) {
-  document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-  return;
-}
-
-$("#event_name").val('');
-$("#event_description").val('');
-$("#event_date").val('');
-$("#event_poster").val('');
-
-document.getElementById("my_view_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-
-// location.reload();
-}
 function addComment(newid){
+  alert("Ading comment");
   var id= newid.getAttribute('id');
   var comment = $("#comment"+id).val();
 
@@ -372,7 +251,7 @@ function addComment(newid){
   }
 
   var strUrl = myurl+"cmd=9&description="+comment+"&id="+id;
-  // prompt("url",strUrl);
+  prompt("url",strUrl);
   var objResult = sendRequest(strUrl);
   document.getElementById("view_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
   if(objResult.result == 0) {
@@ -380,7 +259,7 @@ function addComment(newid){
     return;
   }
 
-  $("#comment"+id).val('');
+  $("#comment").val('');
   document.getElementById("view_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
 
 }
@@ -413,12 +292,12 @@ function getPostComments(id){
 }
 
 function addLikes(newid){
-
+ alert("I like this");
  var id= newid.getAttribute('id'); 
  var likes =  document.getElementById("userlikes"+id).innerText;
 
  var newlikes= parseInt(likes)+1;
- var strUrl = myurl+"cmd=11&likes="+newlikes+"&id="+id;
+  var strUrl = myurl+"cmd=11&likes="+newlikes+"&id="+id;
   // prompt("url",strUrl);
   var objResult = sendRequest(strUrl);
   if(objResult.result == 0) {
@@ -430,49 +309,93 @@ function addLikes(newid){
   location.reload();
   // $("#userlikes").innerHTML=newlikes;
 }
+/**
+Function to delete the equipment
+**/
+function deleteEquipment(newid){
+  var p= newid.getAttribute('id');
+  var strUrl = myurl+"cmd=7&id="+p;
+    // prompt("url", strUrl);
+    var objResult = sendRequest(strUrl);
 
-function getAllUsers(){
-  var strUrl = myurl+"cmd=14";
-  // prompt("url", strUrl);
-  var objResult = sendRequest(strUrl);
+    if(objResult.result == 0){
+      document.getElementById("error_areap").innerHTML ='<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+      return;
+    }
+    if(objResult.result == 1){
 
-  if(objResult.result == 0){
-    alert(objResult.message);
-    return;
+     document.getElementById("error_areap").innerHTML ='<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+   }
+ }
+
+/**
+Function to fetch one equipment
+**/
+function fetchEquipment(newid){
+  $("contentArea").val("");
+  var myid=document.getElementById("editInvent");
+  
+  var p= newid.getAttribute('id');
+  var strUrl = myurl+"cmd=16&id="+p;
+    // prompt("url", strUrl);
+    var objResult = sendRequest(strUrl);
+
+    if(objResult.result == 0){
+      document.getElementById("error_areap").innerHTML ='<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+      return;
+    }
+    if(objResult.result == 1){
+
+      showDiv("editInvent");
+      $("#eeNumber").val(objResult.equipment[1].item_number);
+      $("#eeCode").val(objResult.equipment[1].barcode_number);
+      $("#eeName").val(objResult.equipment[1].item_name);
+      $("#eeManu").val(objResult.equipment[1].manufacturer);  
+      $("#eePrice").val(objResult.equipment[1].price);
+      $("#eeQty").val(objResult.equipment[1].quantity);
+      $("#edateBought").val(objResult.equipment[1].date_bought);
+      $("#erepairDate").val(objResult.equipment[1].last_repair_date);
+      $("#eeCond").val(objResult.equipment[1].condition);
+      $("#eeLoc").val(objResult.equipment[1].e_location);
+      $("#eeDep").val(objResult.equipment[1].department);
+
+      document.getElementById("error_areap").innerHTML ='<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+    }
   }
-  var mytable=document.getElementById("users_table");
-  for(i=1;i<objResult.user.length;i++){
-   var myrow=mytable.rows.length;
-   var row=mytable.insertRow(myrow);
-   username=row.insertCell(0)
-   phone=row.insertCell(1);
-   year=row.insertCell(2);
-   type=row.insertCell(3);
-   edit=row.insertCell(4);
 
+/**
+Function to edit the equipment
+**/
+function editEquipment(){
+  var name = $("#eeName").val();
+  var quantity = $("#eeQty").val();
+  var price = $("#eePrice").val();
 
-   username.innerHTML=objResult.user[i].user_name;
-   phone.innerHTML=objResult.user[i].user_phone;
-   year.innerHTML=objResult.user[i].year_group;
-   // objResult.user[i].user_type
-   type.html('<div class="input-field col s12"><select id="usertype"class="usertype"><option value="'+objResult.user[i].user_type+'">'+objResult.user[i].user_type+'</option></select><label>User type</label></div>'); 
-   edit.innerHTML='</div><button id="myBtn'+objResult.user[i].user_id+'" onclick="change_user_type(this)" class="btn waves-effect waves-light green center-align" type="submit" name="action"><i class="fa fa-save"></i>SAVE</button></div>';      
+  var number = $("#eeNumber").val();
+  var barcode = $("#eeCode").val();
+  var manufacturer = $("#eeManu").val();
+  var repairDate = $("#erepairDate").val();
+  var dateBought = $("#edateBought").val();
+  var condition = $("#eeCond").val();
+  var location = $("#eeLoc").val();
+  var department = $("#eeDep").val();
+  var userId = "benson";
+  
+  var strUrl = myurl+"cmd=6&number="+number+"&eName="+name+"&code="+barcode+"&manu="+manufacturer+
+  "&repairDate="+repairDate+"&price="+price+"&dateBought="+dateBought+"&cod="+condition+
+  "&loc="+location+"&dep="+department+"&uid="+userId+"&qty="+quantity;
+// prompt("url",strUrl);
+var objResult = sendRequest(strUrl);
 
-   var newId=objResult.user[i].user_id;
-   if(document.getElementById('myBtn'+newId)){
-    var getClicked=document.getElementById('myBtn'+newId);
-
-    getClicked.setAttribute('id',newId);
-  }
-
+if(objResult.result == 0){
+  document.getElementById("error_areap").innerHTML ='<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+  return;
+}
+if(objResult.result == 1){  
+ document.getElementById("error_areap").innerHTML ='<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
 }
 }
 
-function change_user_type(newid){
-  var id= newid.getAttribute('id');
-  alert("saving");
-
-}
 function logout(){
  var strUrl = myurl+"cmd=3";
  prompt("url",strUrl);

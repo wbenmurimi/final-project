@@ -19,24 +19,29 @@ class Post extends adb{
     }
     function viewPosts()
     {
-        $str_query = "SELECT * FROM posts";
+        $str_query = "SELECT * FROM posts order by post_time DESC LIMIT 10";
         return $this->query($str_query);
     }
-
-    function editPost($name,$description,$date,$poster)
+    function viewUpcomingEvents()
+    {
+        $str_query = "SELECT * FROM posts order by (event_time-cast(NOW() as date)) DESC LIMIT 4 ";
+        return $this->query($str_query);
+    }
+    function editPost($name,$description,$date,$poster,$postId)
     {
      $str_query = "UPDATE posts SET event_name='$name', description='$description',event_time='$date',poster='$poster'
-      userid= WHERE item_number='$number'";
+      WHERE post_id='$postId'";
      return $this->query($str_query);
  }
     
-    function deletePost($id,$postedBy)
+    function deletePost($id)
     {
-        $str_query="DELETE FROM posts WHERE post_id='$id' AND posted_by='$postedBy'";
+        $str_query="DELETE FROM posts WHERE post_id='$id'";
         return $this->query($str_query);
     }
    
-    function searchPost($searchItem){
+    function searchPost($searchItem)
+    {
         
         $str_query="SELECT * FROM posts WHERE event_name LIKE '%$searchItem%' OR description LIKE '%$searchItem%'
         OR event_time LIKE '%$searchItem%' OR poster LIKE '%$searchItem%";
@@ -45,7 +50,17 @@ class Post extends adb{
       
       function getMyPosts($userId)
       {
-        $str_query = "SELECT * FROM posts where posted_by='$userId'";
+        $str_query = "SELECT * FROM posts where posted_by='$userId' order by post_time DESC LIMIT 5";
+        return $this->query($str_query);
+    }
+    function editLikes($like,$postId)
+    {
+      $str_query = "UPDATE posts SET post_likes='$like'WHERE post_id='$postId'";
+     return $this->query($str_query); 
+    }
+    function viewOnePost($postId)
+    {
+      $str_query = "SELECT * FROM posts where post_id='$postId'";
         return $this->query($str_query);
     }
 }

@@ -30,6 +30,11 @@ class user extends adb{
         $str_query = "INSERT INTO xx_user SET user_name='$username', user_pass=md5('$password'),year_group='$yeargroup',user_phone='$phone',user_type='$usertype'";
         return $this->query($str_query);
     }
+    function getUsers()
+    {
+        $str_query = "SELECT * FROM xx_user order by user_type";
+        return $this->query($str_query);
+    }
    
 }
 ?>

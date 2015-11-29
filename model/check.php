@@ -4,7 +4,7 @@ $user=$_SESSION['username'];
 if(!$_SESSION["username"]){
 // if (!$user) {
  
-header("location:/index.html");
+header("location:index.html");
 }
 //else{
 //

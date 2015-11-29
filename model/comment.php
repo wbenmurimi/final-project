@@ -17,9 +17,9 @@ class Comment extends adb{
         VALUES('$postId','$coment','$user')";
         return $this->query($str_query);
     }
-    function viewComments()
+    function viewComments($postId)
     {
-        $str_query = "SELECT * FROM comments";
+        $str_query = "SELECT * FROM comments where post_id='$postId'";
         return $this->query($str_query);
     }
 

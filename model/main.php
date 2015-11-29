@@ -40,6 +40,18 @@ switch ($cmd) {
   case 10:
   getAllComments();
   break;
+  case 11:
+  addLikes();
+  break;
+  case 12:
+  getUpcomingPosts();
+  break;
+   case 13:
+  getEditPost();
+  break;
+  case 14:
+  getAppUsers();
+  break;
   default:
   echo '{"result": 0, "message": "Unknown command"}';
   return;
@@ -149,6 +161,30 @@ function getAllPosts(){
 }
 
 /**
+*Function to return the upcoming posts in the database
+*/
+function getUpcomingPosts(){
+    include "post.php";
+
+    $post = new Post();
+    $row = $post->viewUpcomingEvents();
+    if(!$row){
+        echo '{"result": 0, "message": "You have no upcoming events in the database"}';
+        return;
+    }
+
+    echo '{"result": 1, "post": [';
+    while($row){
+        echo json_encode($row);
+        $row = $post->fetch();
+        if($row){
+            echo ',';
+        }
+    }
+    echo "]}";
+    return;
+}
+/**
 *Method to edit a post to the database
 */
 function editPost(){
@@ -160,13 +196,37 @@ function editPost(){
     $description = $_GET['description'];
     $date = $_GET['date'];
     $poster = $_GET['poster'];
+     $id = $_GET['id'];
 
-    if(!$post->editPost($name,$description,$date,$poster)){
+    if(!$post->editPost($name,$description,$date,$poster,$id)){
         echo '{"result": 0, "message": "Post was not edited"}';
         return;
     }
     echo '{"result": 1, "message": "Post was edited successfully"}';
 
+    return;
+}
+
+function getEditPost(){
+    include "post.php";
+
+    $post = new Post();
+    $postId = $_GET['id'];
+    $row = $post->viewOnePost($postId);
+    if(!$row){
+        echo '{"result": 0, "message": "You have no posts in the database"}';
+        return;
+    }
+
+    echo '{"result": 1, "post": [';
+    while($row){
+        echo json_encode($row);
+        $row = $post->fetch();
+        if($row){
+            echo ',';
+        }
+    }
+    echo "]}";
     return;
 }
 
@@ -178,9 +238,8 @@ function deletePost(){
 
     $post = new Post();
     $postId = $_GET['id'];
-    $postedBy=$_GET['username'];
 
-    if(!$post->deletePost($postId,$postedBy)){
+    if(!$post->deletePost($postId)){
         echo '{"result": 0, "message": "Post was not deleted "}';
         return;
     }
@@ -195,7 +254,8 @@ function getMyPosts(){
         include "post.php";
 
     $post = new Post();
-    $userId=$_GET['username'];
+    // $userId=$_GET['username'];
+    $userId="ben";
     $row = $post->getMyPosts($userId);
     if(!$row){
         echo '{"result": 0, "message": "You have not made any posts"}';
@@ -213,6 +273,28 @@ function getMyPosts(){
     echo "]}";
     return;
 }
+function getAppUsers(){
+    include "user.php";
+
+    $user = new user();
+    
+    $row = $user->getUsers();
+    if(!$row){
+        echo '{"result": 0, "message": "You have no active users"}';
+        return;
+    }
+
+    echo '{"result": 1, "user": [';
+    while($row){
+        echo json_encode($row);
+        $row = $user->fetch();
+        if($row){
+            echo ',';
+        }
+    }
+    echo "]}";
+    return;
+}
 
 /**
 *Method to add a post to the database
@@ -220,13 +302,13 @@ function getMyPosts(){
 function addComment(){
    include "comment.php";
 
-    $comment = new Comment();
+    $comm = new Comment();
 
     $postId = $_GET['id'];
     $comment = $_GET['description'];
     $user= "ben";
 
-    if(!$comment->addMyComment($postId,$coment,$user)){
+    if(!$comm->addMyComment($postId,$comment,$user)){
         echo '{"result": 0, "message": "Comment was not added"}';
         return;
     }
@@ -243,7 +325,8 @@ function getAllComments(){
     include "comment.php";
 
     $comment = new Comment();
-    $row = $comment->viewComments();
+    $postId = $_GET['id'];
+    $row = $comment->viewComments($postId);
     if(!$row){
         echo '{"result": 0, "message": "You have no comments in this post"}';
         return;
@@ -261,7 +344,25 @@ function getAllComments(){
     return;
 }
 
+/**
+*Method to add likes to the database
+*/
+function addLikes(){
+   include "post.php";
 
+    $post = new Post();
+
+    $like = $_GET['likes'];
+    $postId = $_GET['id'];
+
+    if(!$post->editLikes($like,$postId)){
+        echo '{"result": 0, "message": "You did not like"}';
+        return;
+    }
+    echo '{"result": 1, "message": "You liked this post"}';
+
+    return;
+}
 
 function getuserSession(){
     if(!$_SESSION["username"]){

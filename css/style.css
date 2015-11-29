@@ -23,6 +23,19 @@
   color:#0066ff;
   /*#b30000*/
 }
+#myP{
+  color: black;
+  font-weight: normal;
+  font-size: 13px;
+  
+}
+#myP :hover{
+  color: red;
+}
+#commentSpacing{
+  margin-top: -15px;
+  margin-bottom: -10px;
+}
 .post_likes{
   margin-top: -30px;
   margin-right: 40px;
@@ -37,6 +50,7 @@
 }
 .edit_delete_post_area{
   margin-top: 30px;
+  margin-bottom: 10px;
 }
 .loginfooter{
   margin-bottom: 30px;
@@ -47,6 +61,12 @@
   list-style-type: none;
   width: 100%;
 }
+#my_post_area_li{
+  list-style-type: none;
+}
+#comment_area{
+  list-style-type: none;
+}
 .hide{
     display: none;
   }
@@ -56,6 +76,17 @@
 
   }
 .styleComments p{
+  cursor: pointer; 
+  cursor: hand;
+}
+#editPostbtn{
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+#my_bar{
+  display: inline;
+}
+#login_hand{
   cursor: pointer; 
   cursor: hand;
 }
