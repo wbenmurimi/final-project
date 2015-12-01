@@ -46,11 +46,17 @@ switch ($cmd) {
   case 12:
   getUpcomingPosts();
   break;
-   case 13:
+  case 13:
   getEditPost();
   break;
   case 14:
   getAppUsers();
+  break;
+  case 15:
+  editUserType();
+  break;
+  case 16:
+  sendMessage();
   break;
   default:
   echo '{"result": 0, "message": "Unknown command"}';
@@ -62,76 +68,97 @@ switch ($cmd) {
 function login(){
 	include "user.php";
 
-    $myuser = new user();
+  $myuser = new user();
 
-    $username = $_GET['username'];
-    $password = $_GET['password'];
-    $myuser->Login($username, $password);
-    $row=$myuser->fetch();
-        
-    if($row){
+  $username = $_GET['username'];
+  $password = $_GET['password'];
+  $myuser->Login($username, $password);
+  $row=$myuser->fetch();
+
+  if($row){
     session_destroy();
     session_start();
 
     $_SESSION['username'] = $username;
     $_SESSION['password'] = $password;
-   echo '{"result": 1, "message": "Sign in successful"}';
-//        
-   return; 
+    echo '{"result": 1, "user": [';
+    while($row){
+      echo json_encode($row);
+      $row = $myuser->fetch();
+      if($row){
+        echo ',';
+      }
     }
-     echo '{"result": 0, "message": "Wrong details! Please try again"}';
-        return;
-    
+    echo "]}";
+    return; 
+  }
+  echo '{"result": 0, "message": "Wrong details! Please try again"}';
+  return;
+
 }
+
+
 function userSignUp(){
-    include "user.php";
+  include "user.php";
 
-    $myuser = new user();
-    $username = $_GET['username'];
-    $password = $_GET['password'];
-    $phone = $_GET['phone'];
-    $yeargroup = $_GET['year'];
-    $usertype="regular";
+  $myuser = new user();
+  $username = $_GET['username'];
+  $password = $_GET['password'];
+  $phone = $_GET['phone'];
+  $yeargroup = $_GET['year'];
+  $usertype="regular";
 
-    if(!$myuser->signUp($username,$password,$yeargroup,$phone,$usertype)){
-        echo '{"result": 0, "message": "User not created"}';
-        return;
-    }
-    echo '{"result": 1, "message": "Sign up was successful"}';
-
+  if(!$myuser->signUp($username,$password,$yeargroup,$phone,$usertype)){
+    echo '{"result": 0, "message": "User not created"}';
     return;
+  }
+  echo '{"result": 1, "message": "Sign up was successful"}';
+
+  return;
 }
 
 function logout(){
 
-    if(!$_SESSION['username']){
-        echo '{"result": 0, "message": "The user is not loged in"}';
-        return;
-    }
-    session_destroy();
-    echo '{"result": 1, "message": "The user Loged out successfully"}';
+  if(!$_SESSION['username']){
+    echo '{"result": 0, "message": "The user is not loged in"}';
     return;
+  }
+  session_destroy();
+  echo '{"result": 1, "message": "The user Loged out successfully"}';
+  return;
 }
 /**
 *Method to add a post to the database
 */
 function addpost(){
-    include "post.php";
+  include "post.php";
 
-    $post = new Post();
-    $name = $_GET['name'];
-    $description = $_GET['description'];
-    $date = $_GET['date'];
-    $poster = $_GET['poster'];
-    $user= "ben";
+  $post = new Post();
 
-    if(!$post->addMyPost($name,$description,$date,$poster,$user)){
-        echo '{"result": 0, "message": "post was not added"}';
-        return;
-    }
-    echo '{"result": 1, "message": "post was added successfully"}';
+  // $name = $_GET['name'];
+  // $description = $_GET['description'];
+  // $date = $_GET['date'];
+  // $poster = $_GET['poster'];
+  // $user= $_SESSION['username'];
 
+  $name = $_REQUEST['ename'];
+  $description = $_REQUEST['description'];
+  $date = $_REQUEST['edate'];
+  // $poster = $_REQUEST['poster'];
+  $user= $_SESSION['username'];
+// postername
+  $tempname=$_FILES["poster_icon"]["temp_name"];
+  $filename=$_FILES["poster_icon"]["name"];
+  $path="/image.$filename";
+  move_uploaded_file($tempname, $path);
+
+  if(!$post->addMyPost($name,$description,$date,$filename,$user)){
+    echo '{"result": 0, "message": "post was not added"}';
     return;
+  }
+  echo '{"result": 1, "message": "post was added successfully"}';
+
+  return;
 }
 
 
@@ -139,182 +166,182 @@ function addpost(){
 *Function to return all the posts in the database
 */
 function getAllPosts(){
-    include "post.php";
+  include "post.php";
 
-    $post = new Post();
-    $row = $post->viewPosts();
-    if(!$row){
-        echo '{"result": 0, "message": "You have no posts in the database"}';
-        return;
-    }
-
-    echo '{"result": 1, "post": [';
-    while($row){
-        echo json_encode($row);
-        $row = $post->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $post = new Post();
+  $row = $post->viewPosts();
+  if(!$row){
+    echo '{"result": 0, "message": "You have no posts in the database"}';
     return;
+  }
+
+  echo '{"result": 1, "post": [';
+  while($row){
+    echo json_encode($row);
+    $row = $post->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 
 /**
 *Function to return the upcoming posts in the database
 */
 function getUpcomingPosts(){
-    include "post.php";
+  include "post.php";
 
-    $post = new Post();
-    $row = $post->viewUpcomingEvents();
-    if(!$row){
-        echo '{"result": 0, "message": "You have no upcoming events in the database"}';
-        return;
-    }
-
-    echo '{"result": 1, "post": [';
-    while($row){
-        echo json_encode($row);
-        $row = $post->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $post = new Post();
+  $row = $post->viewUpcomingEvents();
+  if(!$row){
+    echo '{"result": 0, "message": "You have no upcoming events in the database"}';
     return;
+  }
+
+  echo '{"result": 1, "post": [';
+  while($row){
+    echo json_encode($row);
+    $row = $post->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 /**
 *Method to edit a post to the database
 */
 function editPost(){
-   include "post.php";
+ include "post.php";
 
-    $post = new Post();
+ $post = new Post();
 
-    $name = $_GET['name'];
-    $description = $_GET['description'];
-    $date = $_GET['date'];
-    $poster = $_GET['poster'];
-     $id = $_GET['id'];
+ $name = $_GET['name'];
+ $description = $_GET['description'];
+ $date = $_GET['date'];
+ $poster = $_GET['poster'];
+ $id = $_GET['id'];
 
-    if(!$post->editPost($name,$description,$date,$poster,$id)){
-        echo '{"result": 0, "message": "Post was not edited"}';
-        return;
-    }
-    echo '{"result": 1, "message": "Post was edited successfully"}';
+ if(!$post->editPost($name,$description,$date,$poster,$id)){
+  echo '{"result": 0, "message": "Post was not edited"}';
+  return;
+}
+echo '{"result": 1, "message": "Post was edited successfully"}';
 
-    return;
+return;
 }
 
 function getEditPost(){
-    include "post.php";
+  include "post.php";
 
-    $post = new Post();
-    $postId = $_GET['id'];
-    $row = $post->viewOnePost($postId);
-    if(!$row){
-        echo '{"result": 0, "message": "You have no posts in the database"}';
-        return;
-    }
-
-    echo '{"result": 1, "post": [';
-    while($row){
-        echo json_encode($row);
-        $row = $post->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $post = new Post();
+  $postId = $_GET['id'];
+  $row = $post->viewOnePost($postId);
+  if(!$row){
+    echo '{"result": 0, "message": "You have no posts in the database"}';
     return;
+  }
+
+  echo '{"result": 1, "post": [';
+  while($row){
+    echo json_encode($row);
+    $row = $post->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 
 /**
 *Method to delete a post from the database
 */
 function deletePost(){
-    include "post.php";
+  include "post.php";
 
-    $post = new Post();
-    $postId = $_GET['id'];
+  $post = new Post();
+  $postId = $_GET['id'];
 
-    if(!$post->deletePost($postId)){
-        echo '{"result": 0, "message": "Post was not deleted "}';
-        return;
-    }
-    echo '{"result": 1, "message": "Post was deleted successful"}';
-
+  if(!$post->deletePost($postId)){
+    echo '{"result": 0, "message": "Post was not deleted "}';
     return;
+  }
+  echo '{"result": 1, "message": "Post was deleted successful"}';
+
+  return;
 }
 /**
 *Method to fetch posts that have been made by a user
 */
 function getMyPosts(){
-        include "post.php";
+  include "post.php";
 
-    $post = new Post();
+  $post = new Post();
     // $userId=$_GET['username'];
-    $userId="ben";
-    $row = $post->getMyPosts($userId);
-    if(!$row){
-        echo '{"result": 0, "message": "You have not made any posts"}';
-        return;
-    }
-
-    echo '{"result": 1, "post": [';
-    while($row){
-        echo json_encode($row);
-        $row = $post->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $userId=$_SESSION['username'];
+  $row = $post->getMyPosts($userId);
+  if(!$row){
+    echo '{"result": 0, "message": "You have not made any posts"}';
     return;
+  }
+
+  echo '{"result": 1, "post": [';
+  while($row){
+    echo json_encode($row);
+    $row = $post->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 function getAppUsers(){
-    include "user.php";
+  include "user.php";
 
-    $user = new user();
-    
-    $row = $user->getUsers();
-    if(!$row){
-        echo '{"result": 0, "message": "You have no active users"}';
-        return;
-    }
+  $user = new user();
 
-    echo '{"result": 1, "user": [';
-    while($row){
-        echo json_encode($row);
-        $row = $user->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $row = $user->getUsers();
+  if(!$row){
+    echo '{"result": 0, "message": "You have no active users"}';
     return;
+  }
+
+  echo '{"result": 1, "user": [';
+  while($row){
+    echo json_encode($row);
+    $row = $user->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 
 /**
 *Method to add a post to the database
 */
 function addComment(){
-   include "comment.php";
+ include "comment.php";
 
-    $comm = new Comment();
+ $comm = new Comment();
 
-    $postId = $_GET['id'];
-    $comment = $_GET['description'];
-    $user= "ben";
+ $postId = $_GET['id'];
+ $comment = $_GET['description'];
+ $user= $_SESSION['username'];
 
-    if(!$comm->addMyComment($postId,$comment,$user)){
-        echo '{"result": 0, "message": "Comment was not added"}';
-        return;
-    }
-    echo '{"result": 1, "message": "Comment was added successfully"}';
+ if(!$comm->addMyComment($postId,$comment,$user)){
+  echo '{"result": 0, "message": "Comment was not added"}';
+  return;
+}
+echo '{"result": 1, "message": "Comment was added successfully"}';
 
-    return;
+return;
 }
 
 
@@ -322,56 +349,85 @@ function addComment(){
 *Function to return all the posts in the database
 */
 function getAllComments(){
-    include "comment.php";
+  include "comment.php";
 
-    $comment = new Comment();
-    $postId = $_GET['id'];
-    $row = $comment->viewComments($postId);
-    if(!$row){
-        echo '{"result": 0, "message": "You have no comments in this post"}';
-        return;
-    }
-
-    echo '{"result": 1, "comment": [';
-    while($row){
-        echo json_encode($row);
-        $row = $comment->fetch();
-        if($row){
-            echo ',';
-        }
-    }
-    echo "]}";
+  $comment = new Comment();
+  $postId = $_GET['id'];
+  $row = $comment->viewComments($postId);
+  if(!$row){
+    echo '{"result": 0, "message": "You have no comments in this post"}';
     return;
+  }
+
+  echo '{"result": 1, "comment": [';
+  while($row){
+    echo json_encode($row);
+    $row = $comment->fetch();
+    if($row){
+      echo ',';
+    }
+  }
+  echo "]}";
+  return;
 }
 
 /**
 *Method to add likes to the database
 */
 function addLikes(){
-   include "post.php";
+ include "post.php";
 
-    $post = new Post();
+ $post = new Post();
 
-    $like = $_GET['likes'];
-    $postId = $_GET['id'];
+ $like = $_GET['likes'];
+ $postId = $_GET['id'];
 
-    if(!$post->editLikes($like,$postId)){
-        echo '{"result": 0, "message": "You did not like"}';
-        return;
-    }
-    echo '{"result": 1, "message": "You liked this post"}';
+ if(!$post->editLikes($like,$postId)){
+  echo '{"result": 0, "message": "You did not like"}';
+  return;
+}
+echo '{"result": 1, "message": "You liked this post"}';
 
-    return;
+return;
 }
 
-function getuserSession(){
-    if(!$_SESSION["username"]){
-      echo '{"result": 0, "message": "No session stored"}';
-        return;  
-    }
-    echo '{"result": 1, "message": "'.$_SESSION["username"].'"}';
+function editUserType(){
+ include "user.php";
 
-    return;
+ $user = new user();
+
+ $type = $_GET['user'];
+ $id = $_GET['id'];
+
+ if(!$user->editUserType($type,$id)){
+  echo '{"result": 0, "message": "User type was not edited"}';
+  return;
+}
+echo '{"result": 1, "message": "User type was edited successfully"}';
+
+return;
+}
+
+function sendMessage(){
+ $phone = $_GET['phone'];
+ include "smsGateway.php";
+ $smsGateway = new SmsGateway('wbenmurimi@gmail.com', 'murimi2015');
+
+ $deviceID = 14246;
+ $number = '+'.$phone;
+ $message = 'Download Mushene app from www.benanconstruction.com and get ontime updates of campus events';
+
+ $result = $smsGateway->sendMessageToNumber($number, $message, $deviceID);
+
+}
+function getuserSession(){
+  if(!$_SESSION["username"]){
+    echo '{"result": 0, "message": "No session stored"}';
+    return;  
+  }
+  echo '{"result": 1, "message": "'.$_SESSION["username"].'"}';
+
+  return;
 
 }
 ob_end_flush();

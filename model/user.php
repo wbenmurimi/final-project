@@ -35,6 +35,12 @@ class user extends adb{
         $str_query = "SELECT * FROM xx_user order by user_type";
         return $this->query($str_query);
     }
+    function editUserType($type,$id)
+    {
+         $str_query = "UPDATE xx_user SET user_type='$type'
+      WHERE user_id='$id'";
+     return $this->query($str_query);
+    }
    
 }
 ?>

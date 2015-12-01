@@ -24,7 +24,7 @@ class Post extends adb{
     }
     function viewUpcomingEvents()
     {
-        $str_query = "SELECT * FROM posts order by (event_time-cast(NOW() as date)) DESC LIMIT 4 ";
+        $str_query = "SELECT * FROM posts where event_time>=cast(NOW() as date) order by (event_time-cast(NOW() as date)) ASC LIMIT 4 ";
         return $this->query($str_query);
     }
     function editPost($name,$description,$date,$poster,$postId)

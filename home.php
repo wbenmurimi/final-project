@@ -28,12 +28,14 @@
 					<img onclick ="home.html" class="circle responsive-img" src="image/logo.jpg">
 					
 				</div>
-				<li class="active"><a href="home.html">All Events</a></li>
-				<li><a href="index.html">Upcoming Events</a></li>
-				<li><a href="my_groups.html">My Groups</a></li>
-				<li ><a href="add_post.html">Add Post</a></li>
-				<li><a href="my_posts.html">My Posts</a></li>
-				<li><a href="invite.html">Invite</a></li>
+				<li><a href="#"id="login_hand" class=" blue-text" onclick="logout()" >LOGOUT
+				</a></li>
+				<li class="active"><a href="home.php">All Events</a></li>
+				<li><a href="upcoming.php">Upcoming Events</a></li>
+				<li><a href="my_groups.php">My Groups</a></li>
+				<li ><a href="add_post.php">Add Post</a></li>
+				<li><a href="my_posts.php">My Posts</a></li>
+				<li><a href="invite.php">Invite</a></li>
 			</ul>
 			<a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu blue-text"></i></a>
 		</nav>

@@ -9,7 +9,7 @@
 
 	<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 	<link href="css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-	<link href="css/style_mobile.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+	<link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 	<link rel="stylesheet" href="font/css/font-awesome.min.css">
 	<!-- <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 	
@@ -19,8 +19,8 @@
 		
 		<nav class="white">
 			<ul class="myNav right hide-on-med-and-down">
-				<a href="#" class="brand-logo center red-text">Mushene</a>
-				<a id="login_hand" class=" red-text"><h5 onclick="logout()" >LOGOUT
+				<a href="#" class="brand-logo center light-blue-text">Mushene</a>
+				<a id="login_hand" class=" blue-text"><h5 onclick="logout()" >LOGOUT
 				</h5></a>
 			</ul>
 			<ul id="slide-out" class="side-nav white">
@@ -32,9 +32,7 @@
 				</a></li>
 				<li class="active"><a href="home.php">All Events</a></li>
 				<li><a href="upcoming.php">Upcoming Events</a></li>
-				<li ><a href="add_post.php">Add Post</a></li>
-				<li><a href="my_posts.php">My Posts</a></li>
-				<li><a href="invite.php">Invite</a></li>
+				<li><a href="user_invite.php">Invite</a></li>
 			</ul>
 			<a href="#" data-activates="slide-out" class="button-collapse show-on-large"><i class="mdi-navigation-menu blue-text"></i></a>
 		</nav>
@@ -47,7 +45,7 @@
 			<div class="card">
 				<div class="center" id="view_post_error"></div>
 
-				<div class="red" id="post_area_div">
+				<div id="post_area_div">
 					<ol id="post_area_li">
 
 					</ol>

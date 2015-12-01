@@ -78,7 +78,23 @@ function sendRequest(u) {
           document.getElementById("login_error_area").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
           return;
         }
-        window.location.href = "model/device.php";
+        alert("i'm here");
+        alert("Length: "+objResult.user.length);
+        var my_user_type=objResult.user[0].user_type;
+        alert(my_user_type);
+
+        if (my_user_type.localeCompare("admin")==0) {
+          window.location.href ="admin.php"
+        }
+        else if (my_user_type.localeCompare("leader")==0) {
+          window.location.href = "model/device.php";
+        }
+        else if (my_user_type.localeCompare("regular")==0) {
+        window.location.href ="user_home.php"
+        }
+        else
+          location.reload();
+        // window.location.href = "model/device.php";
       }
 
 
@@ -241,7 +257,6 @@ function getPosts(){
 }
 
 function addComment(newid){
-  alert("Ading comment");
   var id= newid.getAttribute('id');
   var comment = $("#comment"+id).val();
 
@@ -251,7 +266,7 @@ function addComment(newid){
   }
 
   var strUrl = myurl+"cmd=9&description="+comment+"&id="+id;
-  prompt("url",strUrl);
+  // prompt("url",strUrl);
   var objResult = sendRequest(strUrl);
   document.getElementById("view_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
   if(objResult.result == 0) {

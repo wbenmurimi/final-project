@@ -86,7 +86,20 @@ function sendRequest(u) {
           document.getElementById("login_error_area").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
           return;
         }
-        window.location.href = "model/device.php";
+         alert("i'm here");
+        var my_user_type=objResult.user[1].user_type;
+        alert(my_user_type);
+
+        if (my_user_type.localeCompare("admin")==0) {
+          window.location.href ="admin.php"
+        }
+        else if (my_user_type.localeCompare("leader")==0) {
+          window.location.href = "model/device.php";
+        }
+        else if (my_user_type.localeCompare("regular")==0) {
+        window.location.href ="home.php"
+        }
+        
       }
 
 
@@ -158,46 +171,62 @@ Adding a new post
 */
 
 function addPost(){
+ var myForm=document.getElementById("my_post_form");
+ var form=FormData(myForm);
+ $.ajax({
+    url: myurl+"cmd=4",
+    type:"POST",
+    data:form,
+    contentType:false,
+    processData:false,
+    success:function(data){
+      alert(data+" "+"message from request");
+    },
+    error:function(data){
+      alert(data+" "+"message from request");
+    }
 
-  var name = $("#event_name").val();
-  var description = $("#event_description").val();
-  var e_date = $("#event_date").val();
-  var e_poster = $("#event_poster").val();
+ });
+
+  // var name = $("#event_name").val();
+  // var description = $("#event_description").val();
+  // var e_date = $("#event_date").val();
+  // var e_poster = $("#event_poster").val();
 
   
-  if(name.length == 0){
-    document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
+  // if(name.length == 0){
+  //   document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
     
-    return;
-  }
-  if(description.length == 0){
-    document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Description<i class="material-icons">close</i></div>';
-    return;
-  }
-  if(e_date.length == 0){
-    document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Date<i class="material-icons">close</i></div>';
-    return;
-  }
-  if(e_poster.length == 0){
-    document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Poster<i class="material-icons">close</i></div>';
-    return
-  }
+  //   return;
+  // }
+  // if(description.length == 0){
+  //   document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Description<i class="material-icons">close</i></div>';
+  //   return;
+  // }
+  // if(e_date.length == 0){
+  //   document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Date<i class="material-icons">close</i></div>';
+  //   return;
+  // }
+  // if(e_poster.length == 0){
+  //   document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">Empty Event Poster<i class="material-icons">close</i></div>';
+  //   return
+  // }
   
-  var strUrl = myurl+"cmd=4&name="+name+"&description="+description+"&date="+e_date+"&poster="+e_poster;
-  // prompt("url",strUrl);
-  var objResult = sendRequest(strUrl);
-  document.getElementById("add_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
-  if(objResult.result == 0) {
-    document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
-    return;
-  }
+  // var strUrl = myurl+"cmd=4&name="+name+"&description="+description+"&date="+e_date+"&poster="+e_poster;
+  // // prompt("url",strUrl);
+  // var objResult = sendRequest(strUrl);
+  // document.getElementById("add_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
+  // if(objResult.result == 0) {
+  //   document.getElementById("add_post_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+  //   return;
+  // }
 
-  $("#event_name").val('');
-  $("#event_description").val('');
-  $("#event_date").val('');
-  $("#event_poster").val('');
+  // $("#event_name").val('');
+  // $("#event_description").val('');
+  // $("#event_date").val('');
+  // $("#event_poster").val('');
 
-  document.getElementById("add_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+  // document.getElementById("add_post_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
 
 // location.reload();
 }
@@ -324,7 +353,7 @@ function addEditedPost(newid){
  var description = $("#event_description").val();
  var e_date = $("#event_date").val();
  var e_poster = $("#event_poster").val();
- alert("new id is "+id);
+ // alert("new id is "+id);
 
  if(name.length == 0){
   document.getElementById("my_view_post_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
@@ -345,7 +374,7 @@ if(e_poster.length == 0){
 }
 
 var strUrl = myurl+"cmd=6&name="+name+"&description="+description+"&date="+e_date+"&poster="+e_poster+"&id="+id;
-prompt("url",strUrl);
+// prompt("url",strUrl);
 var objResult = sendRequest(strUrl);
 document.getElementById("my_view_post_error").innerHTML = '<div class="progress"><div class="indeterminate"></div></div>';
 if(objResult.result == 0) {
@@ -444,20 +473,25 @@ function getAllUsers(){
   for(i=1;i<objResult.user.length;i++){
    var myrow=mytable.rows.length;
    var row=mytable.insertRow(myrow);
-   username=row.insertCell(0)
-   phone=row.insertCell(1);
-   year=row.insertCell(2);
-   type=row.insertCell(3);
-   edit=row.insertCell(4);
+   cnt=row.insertCell(0)
+   username=row.insertCell(1)
+   phone=row.insertCell(2);
+   year=row.insertCell(3);
+   type=row.insertCell(4);
+   edit=row.insertCell(5);
 
-
+   cnt.innerHTML=i;
    username.innerHTML=objResult.user[i].user_name;
    phone.innerHTML=objResult.user[i].user_phone;
    year.innerHTML=objResult.user[i].year_group;
+   var userTypeOption = document.createElement("select");
+   userTypeOption.setAttribute('class','input-field');
+   userTypeOption.setAttribute('value', objResult.user[i].user_type);
    // objResult.user[i].user_type
-   type.html('<div class="input-field col s12"><select id="usertype"class="usertype"><option value="'+objResult.user[i].user_type+'">'+objResult.user[i].user_type+'</option></select><label>User type</label></div>'); 
+   type.innerHTML='<div class="input-field col s12 m8"><input id="userType'+objResult.user[i].user_id+'" type="text" class="validate" autocomplete="off"></div>'; 
    edit.innerHTML='</div><button id="myBtn'+objResult.user[i].user_id+'" onclick="change_user_type(this)" class="btn waves-effect waves-light green center-align" type="submit" name="action"><i class="fa fa-save"></i>SAVE</button></div>';      
-
+   
+   $("#userType"+objResult.user[i].user_id).val(objResult.user[i].user_type);
    var newId=objResult.user[i].user_id;
    if(document.getElementById('myBtn'+newId)){
     var getClicked=document.getElementById('myBtn'+newId);
@@ -470,12 +504,46 @@ function getAllUsers(){
 
 function change_user_type(newid){
   var id= newid.getAttribute('id');
-  alert("saving");
+  // alert("saving");
+  var user = $("#userType"+id).val();
+ if(user.length == 0){
+  document.getElementById("admin_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
+
+  return;
+}
+var strUrl = myurl+"cmd=15&user="+user+"&id="+id;
+  // prompt("url",strUrl);
+  var objResult = sendRequest(strUrl);
+  if(objResult.result == 0) {
+    document.getElementById("admin_error").innerHTML = '<div class="chip red white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+    return;
+  }
+
+  document.getElementById("admin_error").innerHTML = '<div class="chip green white-text">'+objResult.message+'<i class="material-icons">close</i></div>';
+  location.reload();
 
 }
+
+function sendInvite(){
+
+  var fon = $("#user_invite").val();
+ if(fon.length == 0){
+  document.getElementById("send_msg_error").innerHTML = '<div class="chip red white-text">Empty Event Name<i class="material-icons">close</i></div>';
+
+  return;
+}
+var strUrl = myurl+"cmd=16&phone="+fon;
+  prompt("url",strUrl);
+  var objResult = sendRequest(strUrl);
+ 
+  document.getElementById("send_msg_error").innerHTML = '<div class="chip green white-text">Message sent to: '+fon+'<i class="material-icons">close</i></div>';
+  $("#user_invite").val('');
+
+}
+
 function logout(){
  var strUrl = myurl+"cmd=3";
- prompt("url",strUrl);
+ // prompt("url",strUrl);
  var objResult = sendRequest(strUrl);
 
  if(objResult.result == 0){
